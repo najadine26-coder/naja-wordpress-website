@@ -78,6 +78,7 @@ add_action( 'wp_enqueue_scripts', 'naja_enqueue_assets' );
  */
 function naja_create_menu_page() {
 	if ( naja_menu_page_id() ) {
+		update_option( 'naja_menu_page_ready', '1' );
 		return;
 	}
 	$id = wp_insert_post(
@@ -90,9 +91,22 @@ function naja_create_menu_page() {
 	);
 	if ( $id && ! is_wp_error( $id ) ) {
 		update_post_meta( $id, '_wp_page_template', 'page-templates/menu.php' );
+		update_option( 'naja_menu_page_ready', '1' );
 	}
 }
 add_action( 'after_switch_theme', 'naja_create_menu_page' );
+
+/**
+ * Sites that got the theme without a fresh activation (Git deploy, GitHub Sync)
+ * never ran the hook above, so /menu/ would 404. Create the page once on the
+ * first request instead; it is not recreated if someone deletes it later.
+ */
+function naja_maybe_create_menu_page() {
+	if ( '1' !== get_option( 'naja_menu_page_ready' ) ) {
+		naja_create_menu_page();
+	}
+}
+add_action( 'init', 'naja_maybe_create_menu_page', 20 );
 
 /**
  * Create the Gallery page (once) so the "Gallery" link works straight away.
