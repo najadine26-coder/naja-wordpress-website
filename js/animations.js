@@ -151,10 +151,12 @@
           y: -60, ease: "none",
           scrollTrigger: { trigger: ".banner", start: "top bottom", end: "bottom top", scrub: true }
         });
-        gsap.from(".banner__mark", {
-          scale: 0.4, autoAlpha: 0, rotate: -20 * dir, duration: 1.4, ease: "back.out(1.6)",
-          scrollTrigger: { trigger: ".banner", start: "top 70%", once: true }
-        });
+        if ($(".banner__mark")) { // not every banner carries the quote mark (e.g. the Experience call to action)
+          gsap.from(".banner__mark", {
+            scale: 0.4, autoAlpha: 0, rotate: -20 * dir, duration: 1.4, ease: "back.out(1.6)",
+            scrollTrigger: { trigger: ".banner", start: "top 70%", once: true }
+          });
+        }
       }
 
       /* --- 07 How to order: the timeline draws itself, steps rise in 3D --- */
@@ -301,6 +303,18 @@
           gsap.fromTo(frame, { yPercent: -amount }, {
             yPercent: amount, ease: "none",
             scrollTrigger: { trigger: item, start: "top bottom", end: "bottom top", scrub: true }
+          });
+        });
+      }
+
+      /* Experience page: restrained parallax inside framed photos (the photo is oversized in CSS) */
+      if (c.desktop) {
+        $$("[data-xp-parallax]").forEach(function (frame) {
+          var img = $("img", frame);
+          if (!img) return;
+          gsap.fromTo(img, { yPercent: -4 }, {
+            yPercent: 4, ease: "none",
+            scrollTrigger: { trigger: frame, start: "top bottom", end: "bottom top", scrub: true }
           });
         });
       }

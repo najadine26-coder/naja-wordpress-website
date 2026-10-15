@@ -85,6 +85,36 @@ function naja_gallery_link() {
 	return 'href="' . esc_url( $url ) . '" data-page-link="' . esc_url( $url ) . '"' . $current;
 }
 
+/** Is the current view the Experience page template? */
+function naja_is_experience_page() {
+	return is_page_template( 'page-templates/experience.php' );
+}
+
+/** ID of the first published page that uses the Experience template (0 if none). */
+function naja_experience_page_id() {
+	$pages = get_pages(
+		array(
+			'meta_key'   => '_wp_page_template', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'meta_value' => 'page-templates/experience.php', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'number'     => 1,
+		)
+	);
+	return $pages ? (int) $pages[0]->ID : 0;
+}
+
+/** URL of the Experience page. */
+function naja_experience_url() {
+	$id = naja_experience_page_id();
+	return $id ? get_permalink( $id ) : home_url( '/experience/' );
+}
+
+/** Attributes for a link to the Experience page (carries the language like the Menu link). */
+function naja_experience_link() {
+	$url     = naja_experience_url();
+	$current = naja_is_experience_page() ? ' aria-current="page"' : '';
+	return 'href="' . esc_url( $url ) . '" data-page-link="' . esc_url( $url ) . '"' . $current;
+}
+
 /** Digits of a phone number ("+966 58…" → "96658…"). */
 function naja_digits( $value ) {
 	$d = preg_replace( '/\D+/', '', (string) $value );

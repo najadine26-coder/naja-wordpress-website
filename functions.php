@@ -48,6 +48,9 @@ function naja_enqueue_assets() {
 	if ( naja_is_gallery_page() ) {
 		wp_enqueue_style( 'naja-gallery', $uri . '/css/gallery.css', array( 'naja-style' ), $ver );
 	}
+	if ( naja_is_experience_page() ) {
+		wp_enqueue_style( 'naja-experience', $uri . '/css/experience.css', array( 'naja-style' ), $ver );
+	}
 	wp_enqueue_style( 'naja-wp', $uri . '/css/wp.css', array( 'naja-style' ), $ver );
 
 	wp_enqueue_script( 'naja-config', $uri . '/js/config.js', array(), $ver, true );
@@ -140,3 +143,34 @@ function naja_maybe_create_gallery_page() {
 	}
 }
 add_action( 'init', 'naja_maybe_create_gallery_page', 20 );
+
+/**
+ * Create the Experience page (once), the same way as the Gallery page, so the
+ * "Experience" link works on sites that never re-activated the theme.
+ */
+function naja_create_experience_page() {
+	if ( naja_experience_page_id() ) {
+		update_option( 'naja_experience_page_ready', '1' );
+		return;
+	}
+	$id = wp_insert_post(
+		array(
+			'post_title'  => 'تجربة نجا',
+			'post_name'   => 'experience',
+			'post_status' => 'publish',
+			'post_type'   => 'page',
+		)
+	);
+	if ( $id && ! is_wp_error( $id ) ) {
+		update_post_meta( $id, '_wp_page_template', 'page-templates/experience.php' );
+		update_option( 'naja_experience_page_ready', '1' );
+	}
+}
+add_action( 'after_switch_theme', 'naja_create_experience_page' );
+
+function naja_maybe_create_experience_page() {
+	if ( '1' !== get_option( 'naja_experience_page_ready' ) ) {
+		naja_create_experience_page();
+	}
+}
+add_action( 'init', 'naja_maybe_create_experience_page', 20 );

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?><!doctype html>
-<html lang="ar" dir="rtl" class="no-js<?php echo naja_is_menu_page() ? ' page-menu' : ''; ?><?php echo naja_is_gallery_page() ? ' page-gallery' : ''; ?>">
+<html lang="ar" dir="rtl" class="no-js<?php echo naja_is_menu_page() ? ' page-menu' : ''; ?><?php echo naja_is_gallery_page() ? ' page-gallery' : ''; ?><?php echo naja_is_experience_page() ? ' page-experience' : ''; ?>">
 <head>
   <meta charset="<?php bloginfo( 'charset' ); ?>">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <ul class="primary-nav__list">
           <li><a <?php echo naja_section_link( '' ); ?> data-i18n="nav.home">الرئيسية</a></li>
           <li><a <?php echo naja_menu_link(); ?><?php echo naja_is_menu_page() ? ' class="is-active"' : ''; ?> data-i18n="nav.menu">القائمة</a></li>
-          <li><a <?php echo naja_section_link( '#experience' ); ?> data-i18n="nav.experience">التجربة</a></li>
+          <li><a <?php echo naja_experience_link(); ?><?php echo naja_is_experience_page() ? ' class="is-active"' : ''; ?> data-i18n="nav.experience">التجربة</a></li>
           <li><a <?php echo naja_gallery_link(); ?><?php echo naja_is_gallery_page() ? ' class="is-active"' : ''; ?> data-i18n="nav.gallery">المعرض</a></li>
           <li><a <?php echo naja_section_link( '#visit' ); ?> data-i18n="nav.contact">تواصل معنا</a></li>
         </ul>
@@ -61,7 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       <ol class="mobile-nav__list">
         <li><a <?php echo naja_section_link( '' ); ?>><span class="mobile-nav__num">01</span><span data-i18n="nav.home">الرئيسية</span></a></li>
         <li><a <?php echo naja_menu_link(); ?>><span class="mobile-nav__num">02</span><span data-i18n="nav.menu">القائمة</span></a></li>
-        <li><a <?php echo naja_section_link( '#experience' ); ?>><span class="mobile-nav__num">03</span><span data-i18n="nav.experience">التجربة</span></a></li>
+        <li><a <?php echo naja_experience_link(); ?>><span class="mobile-nav__num">03</span><span data-i18n="nav.experience">التجربة</span></a></li>
         <li><a <?php echo naja_gallery_link(); ?>><span class="mobile-nav__num">04</span><span data-i18n="nav.gallery">المعرض</span></a></li>
         <li><a <?php echo naja_section_link( '#how-to-order' ); ?>><span class="mobile-nav__num">05</span><span data-i18n="nav.order">طريقة الطلب</span></a></li>
         <li><a <?php echo naja_section_link( '#visit' ); ?>><span class="mobile-nav__num">06</span><span data-i18n="nav.contact">تواصل معنا</span></a></li>
