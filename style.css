@@ -1,11 +1,14 @@
 /*
-Theme Name: Naja Theme
-Theme URI: https://github.com/najadine26-coder/naja-wordpress-website
-Author: Naja Dine Agency
-Description: Naja Dine Agency-র কাস্টম WordPress থিম। Hostinger Git দিয়ে deploy হয়।
+Theme Name: Naja Restaurant
+Description: Arabic-first (RTL) restaurant theme for Naja Restaurant, Dammam, with an English switch. Cinematic homepage, a searchable menu page with WhatsApp ordering, a Dishes manager in wp-admin and Customizer settings for contact details and photos.
 Version: 1.0.0
 Requires at least: 6.0
+Tested up to: 6.8
 Requires PHP: 7.4
-License: GPL-2.0-or-later
-Text Domain: naja-theme
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: naja
+Tags: rtl-language-support, one-column, custom-logo, theme-options, food-and-drink
 */
+
+/* The theme's real styles live in css/style.css, css/menu.css and css/wp.css (enqueued in functions.php). */

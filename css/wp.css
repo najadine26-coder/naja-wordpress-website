@@ -1,0 +1,41 @@
+/* =========================================================================
+   NAJA RESTAURANT — WORDPRESS ADDITIONS (loaded by the WordPress theme only)
+   ========================================================================= */
+
+/* Keep the fixed header and sticky category bar below the admin toolbar */
+.admin-bar .site-header { top: 32px; }
+.admin-bar .menu-nav { top: calc(var(--header-h-scrolled, 64px) + 32px); }
+.admin-bar .scroll-progress { top: 32px; }
+@media screen and (max-width: 782px) {
+  .admin-bar .site-header, .admin-bar .scroll-progress { top: 46px; }
+  .admin-bar .menu-nav { top: calc(var(--header-h-scrolled, 64px) + 46px); }
+}
+@media screen and (max-width: 600px) {
+  /* WordPress un-fixes the toolbar on small phones */
+  .admin-bar .site-header, .admin-bar .scroll-progress { top: 0; }
+  .admin-bar .menu-nav { top: var(--header-h-scrolled, 64px); }
+}
+
+/* Ordinary pages and posts */
+.wp-page { padding-block: calc(var(--header-h) + 64px) var(--section-space); min-height: 70vh; }
+.wp-page__inner { max-width: calc(860px + var(--gutter) * 2); }
+.wp-page__title { margin-bottom: 32px; font-size: clamp(2rem, 4vw, 3.2rem); }
+.wp-entry + .wp-entry { margin-top: 48px; padding-top: 48px; border-top: 1px solid var(--brand-line); }
+.wp-entry__title { font-size: 1.6rem; margin-bottom: 12px; }
+.wp-entry__title a:hover { color: var(--brand); }
+.wp-content { color: rgba(255, 248, 242, 0.85); font-size: 1.05rem; line-height: 1.85; }
+.wp-content > * + * { margin-top: 1.1em; }
+.wp-content h2, .wp-content h3, .wp-content h4 { color: var(--cream); line-height: 1.3; margin-top: 1.8em; }
+.wp-content a { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
+.wp-content ul, .wp-content ol { padding-inline-start: 1.4em; }
+.wp-content ul { list-style: disc; }
+.wp-content ol { list-style: decimal; }
+.wp-content img { height: auto; }
+.wp-content blockquote { margin: 1.5em 0; padding-inline-start: 20px; border-inline-start: 2px solid var(--brand); color: var(--cream); }
+.wp-content .alignwide { margin-inline: calc(var(--gutter) * -1); }
+.wp-content .aligncenter { margin-inline: auto; }
+.wp-content figcaption, .wp-caption-text { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
+.screen-reader-text { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+.pagination, .nav-links { display: flex; gap: 10px; margin-top: 48px; }
+.nav-links .page-numbers { min-width: 42px; min-height: 42px; display: inline-grid; place-items: center; border: 1px solid var(--brand-line); }
+.nav-links .page-numbers.current, .nav-links .page-numbers:hover { border-color: var(--brand); color: var(--brand); }
