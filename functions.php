@@ -19,6 +19,7 @@ require get_template_directory() . '/inc/helpers.php';
 require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/dishes.php';
 require get_template_directory() . '/inc/head.php';
+require get_template_directory() . '/inc/github-sync.php';
 
 /**
  * Theme supports and menus.
@@ -37,7 +38,7 @@ add_action( 'after_setup_theme', 'naja_setup' );
  */
 function naja_enqueue_assets() {
 	$uri = get_template_directory_uri();
-	$ver = NAJA_VERSION;
+	$ver = naja_sync_asset_version();
 
 	wp_enqueue_style( 'naja-fonts', $uri . '/css/fonts.css', array(), $ver );
 	wp_enqueue_style( 'naja-style', $uri . '/css/style.css', array( 'naja-fonts' ), $ver );

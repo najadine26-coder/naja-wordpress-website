@@ -21,6 +21,22 @@ Deploy শেষে:
 2. **Settings → Permalinks** → "Post name" বেছে সেভ করুন।
 3. LiteSpeed Cache থাকলে সব cache purge করুন।
 
+## GitHub Sync (WordPress-এর ভেতরে)
+
+WordPress admin → **Appearance → GitHub Sync**:
+
+- **সাইটে আছে** আর **GitHub-এ সর্বশেষ** commit পাশাপাশি দেখায়: commit নম্বর (`#4 · a1b2c3d`), বার্তা আর সময়।
+- নতুন commit এলে জানায়:
+  - wp-admin-এর সব পাতায় হলুদ নোটিশ "🔔 থিমের নতুন আপডেট এসেছে"
+  - উপরের admin bar-এ "🔔 থিম আপডেট (২)"
+  - মেনুতে GitHub Sync-এর পাশে সংখ্যা
+  - প্রতি ঘণ্টায় চেক করে, প্রতিটা নতুন commit-এর জন্য admin email-এ একবার ইমেইল পাঠায় (সেটিংস থেকে বন্ধ করা যায়)
+- **এখনই Sync করুন**: GitHub থেকে সর্বশেষ commit নামিয়ে থিম ফোল্ডারটা বদলে দেয়।
+- **এটাই সাইটে আছে**: সাইটে কোন commit আছে জানা না থাকলে (যেমন Hostinger দিয়ে deploy করার পর), সর্বশেষ commit-কে "সাইটে আছে" হিসেবে চিহ্নিত করে।
+- Sync-এর পর CSS/JS-এর `?ver=` এ commit যোগ হয়, তাই ব্রাউজার পুরোনো ফাইল দেখায় না।
+
+কোড: `inc/github-sync.php`।
+
 ## বিকল্প: GitHub Actions + FTP
 
 `.github/workflows/deploy.yml` push-এর সময় FTP দিয়েও থিম আপলোড করতে পারে। এটা চালাতে GitHub → **Settings → Secrets and variables → Actions**-এ `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` (আর দরকার হলে `FTP_SERVER_DIR`) দিন। Hostinger-এর Deploy from GitHub ব্যবহার করলে এটার দরকার নেই।
