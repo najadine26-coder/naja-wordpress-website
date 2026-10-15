@@ -49,6 +49,7 @@ functions.php        থিম সেটআপ, CSS/JS লোড
 header.php, footer.php, index.php, page.php
 front-page.php       হোমপেজ
 page-templates/menu.php  মেনু পেজ (WhatsApp অর্ডার)
+page-templates/contact.php  যোগাযোগ পেজ (ফর্ম: inc/contact.php, বার্তা admin-এর Messages মেনুতে)
 page-templates/gallery.php  গ্যালারি পেজ (ফিল্টার + lightbox); ছবি ও ক্যাটেগরি js/gallery-data.js-এ
 inc/                 customizer, dishes, SEO head, helpers
 css/                 ডিজাইন (gallery.css শুধু গ্যালারি পেজে)

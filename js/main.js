@@ -892,6 +892,63 @@
   }
 
   /* ---------------------------------------------------------------------
+     Contact page: info cards + map from the same config as the footer
+     (empty details show a clearly marked "to be announced" card, never a guess)
+     --------------------------------------------------------------------- */
+  var contactCardsEl = $("#contactCards"), contactMapEl = $("#contactMap");
+
+  function contactCardHtml(c) {
+    var inner =
+      '<svg class="icon ct-card__icon' + (c.dir ? " icon--dir" : "") + '" aria-hidden="true"><use href="#' + c.icon + '"/></svg>' +
+      '<span class="ct-card__body">' +
+        '<span class="ct-card__label">' + esc(c.label) + "</span>" +
+        '<span class="ct-card__value">' + c.value + "</span>" +
+        (c.href ? '<span class="ct-card__cta">' + esc(c.cta) + '<svg class="icon icon--dir" aria-hidden="true"><use href="#i-arrow"/></svg></span>' : "") +
+      "</span>";
+    var cls = "ct-card" + (c.href ? "" : " ct-card--static") + (c.missing ? " is-missing" : "");
+    return "<li>" + (c.href
+      ? '<a class="' + cls + '" href="' + esc(c.href) + '"' + (c.external ? ' target="_blank" rel="noopener noreferrer"' : "") + ">" + inner + "</a>"
+      : '<div class="' + cls + '">' + inner + "</div>") + "</li>";
+  }
+
+  function renderContactPage() {
+    if (contactCardsEl) {
+      var phone = digits(config.phone), wa = digits(config.whatsapp);
+      var address = loc(config.address), hours = config.openingHours || [], map = config.googleMapsUrl;
+      var cards = [
+        { icon: "i-phone", label: t("visit.phone"), value: phone ? '<span class="ltr" dir="ltr">' + esc(displayPhone(phone)) + "</span>" : tbc(), href: phone ? "tel:+" + phone : "", cta: t("visit.call"), missing: !phone },
+        { icon: "i-whatsapp", label: t("visit.whatsapp"), value: wa ? '<span class="ltr" dir="ltr">' + esc(displayPhone(wa)) + "</span>" : tbc(), href: wa ? waUrl("") : "", cta: t("cta.whatsapp"), external: true, missing: !wa },
+        { icon: "i-pin", label: t("visit.address"), value: address ? esc(address) + "<br>" + esc(t("visit.cityLine")) : esc(t("visit.cityLine")) + "<br>" + tbc(), href: "", missing: !address },
+        { icon: "i-arrow", dir: true, label: t("ct.dirLabel"), value: esc(t("visit.cityLine")), href: map || "", cta: t("visit.directions"), external: true, missing: !map },
+        { icon: "i-clock", label: t("visit.hours"), value: hours.length
+            ? hours.map(function (h) { return '<span class="hours-row"><span>' + esc(loc(h.days)) + "</span><span>" + esc(loc(h.time)) + "</span></span>"; }).join("")
+            : tbc(), href: "", missing: !hours.length }
+      ];
+      contactCardsEl.innerHTML = cards.map(contactCardHtml).join("");
+    }
+
+    var addrEl = $("#contactAddress");
+    if (addrEl) {
+      var a = loc(config.address);
+      addrEl.innerHTML = a ? esc(a) + "<br>" + esc(t("visit.cityLine")) : esc(t("visit.cityLine"));
+    }
+
+    if (contactMapEl) {
+      var src = config.mapsEmbedUrl || "";
+      var ok = /^https:\/\/(www\.google\.com\/maps\/embed\?|maps\.google\.com\/maps\?.*output=embed)/i.test(src);
+      var frame = $("iframe", contactMapEl);
+      if (ok && !frame) {
+        contactMapEl.classList.add("has-map");
+        contactMapEl.innerHTML = '<iframe src="' + esc(src) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen title=""></iframe>';
+        frame = $("iframe", contactMapEl);
+      }
+      if (frame) frame.title = t("ct.mapTitle");
+      var ph = $("[data-map-placeholder]");
+      if (ph) ph.hidden = ok;
+    }
+  }
+
+  /* ---------------------------------------------------------------------
      Homepage FAQ (visible list + FAQPage structured data from the same text)
      --------------------------------------------------------------------- */
   var FAQ_COUNT = 4;
@@ -1103,6 +1160,7 @@
     renderMenu();
     renderGallery();
     renderContact();
+    renderContactPage();
     renderFaq();
     refreshActions();
     if (state.lightboxIndex > -1) showLightbox(state.lightboxIndex);
@@ -1116,6 +1174,7 @@
     if (anim && anim.teardown) anim.teardown();
     state.lang = lang;
     renderAll();
+    document.dispatchEvent(new CustomEvent("naja:lang", { detail: { lang: lang } })); // lets page scripts (e.g. the contact form) refresh their own text
     if (persist) {
       storageSet("naja-lang", lang);
       try {

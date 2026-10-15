@@ -22,6 +22,8 @@ function naja_mod_defaults() {
 		'address_ar'         => '',
 		'address_en'         => '',
 		'maps_url'           => 'https://www.google.com/maps/search/?api=1&query=Dammam%2C%20Saudi%20Arabia',
+		'maps_embed'         => '',
+		'contact_email'      => '',
 		'hours_ar'           => '',
 		'hours_en'           => '',
 		'social_instagram'   => '',
@@ -100,6 +102,27 @@ function naja_customize_register( $wp_customize ) {
 		)
 	);
 
+	$wp_customize->add_setting( 'naja_maps_embed', array( 'default' => '', 'sanitize_callback' => 'naja_sanitize_maps_embed' ) );
+	$wp_customize->add_control(
+		'naja_maps_embed',
+		array(
+			'label'       => __( 'Google Maps embed (Contact page map)', 'naja' ),
+			'description' => __( 'In Google Maps open the restaurant pin → Share → Embed a map → copy the HTML, and paste it here (or just its src address). Empty = the Contact page shows a map placeholder instead of a map.', 'naja' ),
+			'section'     => 'naja_contact',
+			'type'        => 'textarea',
+		)
+	);
+	$wp_customize->add_setting( 'naja_contact_email', array( 'default' => '', 'sanitize_callback' => 'sanitize_email' ) );
+	$wp_customize->add_control(
+		'naja_contact_email',
+		array(
+			'label'       => __( 'Contact form: send messages to', 'naja' ),
+			'description' => __( 'Email address that receives messages from the Contact page form. Empty = the site admin email. Messages are always also saved under Messages in the admin menu.', 'naja' ),
+			'section'     => 'naja_contact',
+			'type'        => 'email',
+		)
+	);
+
 	// Opening hours.
 	$wp_customize->add_section(
 		'naja_hours',
@@ -161,6 +184,20 @@ function naja_customize_register( $wp_customize ) {
 }
 add_action( 'customize_register', 'naja_customize_register' );
 
+/**
+ * Accept only a Google Maps embed address: the Customizer may be given the full
+ * <iframe> code or just its src. Anything else is dropped.
+ */
+function naja_sanitize_maps_embed( $value ) {
+	$value = trim( (string) $value );
+	if ( preg_match( '/src\s*=\s*["\']([^"\']+)["\']/i', $value, $m ) ) {
+		$value = $m[1];
+	}
+	$value = esc_url_raw( html_entity_decode( $value ) );
+	$ok    = preg_match( '#^https://(www\.)?google\.com/maps/embed\?#i', $value ) || preg_match( '#^https://maps\.google\.com/maps\?.*output=embed#i', $value );
+	return $ok ? $value : '';
+}
+
 /** Opening hours rows in the shape config.js expects. */
 function naja_opening_hours() {
 	$split = function ( $text ) {
@@ -199,6 +236,7 @@ function naja_config_overrides_js() {
 		'phone'            => naja_digits( naja_mod( 'phone' ) ) ? '+' . naja_digits( naja_mod( 'phone' ) ) : '',
 		'address'          => array( 'ar' => naja_mod( 'address_ar' ), 'en' => naja_mod( 'address_en' ) ),
 		'googleMapsUrl'    => naja_mod( 'maps_url' ),
+		'mapsEmbedUrl'     => naja_sanitize_maps_embed( naja_mod( 'maps_embed' ) ),
 		'openingHours'     => naja_opening_hours(),
 		'social'           => array(
 			'instagram' => naja_mod( 'social_instagram' ),

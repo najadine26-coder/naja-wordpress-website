@@ -1,0 +1,180 @@
+/* =========================================================================
+   NAJA RESTAURANT — CONTACT PAGE
+   Loaded after style.css on the Contact page only. Reuses the homepage
+   tokens, hero, buttons, "visit" call-to-action and footer styles.
+   Logical properties keep the layout correct in both RTL and LTR.
+   ========================================================================= */
+
+/* =========================================================================
+   01 — HERO
+   ========================================================================= */
+.hero--contact {
+  min-height: 64vh;
+  min-height: 64svh;
+  justify-content: center;
+  padding-bottom: clamp(56px, 8vh, 96px);
+}
+.hero--contact .hero__content { max-width: 820px; }
+.hero--contact .hero__title { font-size: clamp(2.8rem, 8vw, 6.2rem); }
+.hero--contact .hero__img { object-position: center 50%; }
+.hero--contact .hero__shade {
+  background:
+    linear-gradient(to top, var(--bg) 0%, rgba(17, 17, 17, 0.8) 26%, rgba(17, 17, 17, 0.35) 62%, rgba(17, 17, 17, 0.6) 100%),
+    linear-gradient(to left, rgba(17, 17, 17, 0.9) 0%, rgba(17, 17, 17, 0.4) 60%, rgba(17, 17, 17, 0.15) 100%);
+}
+[dir="ltr"] .hero--contact .hero__shade {
+  background:
+    linear-gradient(to top, var(--bg) 0%, rgba(17, 17, 17, 0.8) 26%, rgba(17, 17, 17, 0.35) 62%, rgba(17, 17, 17, 0.6) 100%),
+    linear-gradient(to right, rgba(17, 17, 17, 0.9) 0%, rgba(17, 17, 17, 0.4) 60%, rgba(17, 17, 17, 0.15) 100%);
+}
+
+/* =========================================================================
+   02 — CONTACT CARDS
+   ========================================================================= */
+.ct-cards {
+  display: grid; gap: clamp(12px, 1.6vw, 20px);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 640px) { .ct-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .ct-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.ct-card {
+  position: relative; height: 100%;
+  display: flex; align-items: flex-start; gap: 18px;
+  padding: clamp(20px, 2.4vw, 30px);
+  border: 1px solid var(--brand-line);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.035), transparent 60%), var(--bg-2);
+  transition: border-color 0.4s var(--ease), transform 0.5s var(--ease), background-color 0.4s;
+}
+a.ct-card:hover, a.ct-card:focus-visible { border-color: var(--brand-soft); transform: translateY(-4px); }
+.ct-card__icon {
+  width: 52px; height: 52px; flex: none; padding: 14px;
+  border: 1px solid var(--brand-soft); color: var(--brand);
+  background: var(--brand-faint);
+  transition: background-color 0.4s, color 0.4s;
+}
+a.ct-card:hover .ct-card__icon, a.ct-card:focus-visible .ct-card__icon { background: var(--brand-fill); color: #ffffff; }
+.ct-card__body { display: grid; gap: 4px; min-width: 0; }
+.ct-card__label {
+  font-size: 0.78rem; color: var(--brand); letter-spacing: 0.16em; text-transform: uppercase; font-family: var(--font-en);
+}
+.ct-card__label:lang(ar), [lang="ar"] .ct-card__label { font-family: var(--font-ar); letter-spacing: 0; text-transform: none; font-size: 0.9rem; }
+.ct-card__value { font-size: 1.08rem; color: var(--cream); line-height: 1.5; overflow-wrap: anywhere; }
+.ct-card__value .hours-row { display: flex; justify-content: space-between; gap: 16px; font-size: 0.95rem; }
+.ct-card__cta {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 8px;
+  font-size: 0.9rem; font-weight: 600; color: var(--brand);
+}
+.ct-card__cta .icon { transition: transform 0.4s var(--ease); }
+a.ct-card:hover .ct-card__cta .icon { transform: translateX(4px); }
+[dir="rtl"] a.ct-card:hover .ct-card__cta .icon { transform: scaleX(-1) translateX(4px); }
+.ct-card.is-missing { border-style: dashed; }
+.ct-card.is-missing .ct-card__icon { color: var(--muted); border-color: var(--brand-line); background: transparent; }
+.ct-card .tbc { color: var(--muted); font-size: 0.95rem; }
+
+/* =========================================================================
+   03 — FORM
+   ========================================================================= */
+.ct-form-wrap { display: grid; gap: clamp(32px, 5vw, 72px); align-items: start; }
+@media (min-width: 1000px) { .ct-form-wrap { grid-template-columns: 0.8fr 1.2fr; } }
+.ct-form-intro { display: grid; gap: 18px; justify-items: start; }
+
+.ct-form {
+  display: grid; gap: 20px;
+  padding: clamp(22px, 3.4vw, 44px);
+  border: 1px solid var(--brand-line);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.035), transparent 60%), var(--bg-2);
+  box-shadow: var(--shadow-deep);
+}
+.ct-required-note { font-size: 0.85rem; color: var(--muted); }
+.ct-grid { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 640px) {
+  .ct-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ct-field--wide { grid-column: 1 / -1; }
+}
+
+.ct-field { display: grid; gap: 8px; align-content: start; }
+.ct-field label { font-size: 0.92rem; font-weight: 600; color: var(--cream); }
+.ct-req { color: var(--brand); }
+.ct-opt { font-weight: 400; color: var(--muted); font-size: 0.85rem; }
+
+.ct-field input, .ct-field textarea {
+  width: 100%; min-height: 52px; padding: 12px 16px;
+  font: inherit; font-size: 1rem; color: var(--cream);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--brand-line);
+  border-radius: 0;
+  transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+  -webkit-appearance: none; appearance: none;
+}
+.ct-field textarea { min-height: 150px; resize: vertical; line-height: 1.6; }
+.ct-field input::placeholder, .ct-field textarea::placeholder { color: var(--muted); }
+.ct-field input:hover, .ct-field textarea:hover { border-color: var(--brand-soft); }
+.ct-field input:focus, .ct-field textarea:focus {
+  outline: none; border-color: var(--brand); background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 3px var(--brand-faint);
+}
+.ct-field input:focus-visible, .ct-field textarea:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+/* phone and email read left-to-right even on the Arabic page */
+.ct-field input[dir="ltr"] { text-align: start; }
+[dir="rtl"] .ct-field input[dir="ltr"] { text-align: right; }
+
+.ct-field.is-invalid input, .ct-field.is-invalid textarea { border-color: var(--brand); background: rgba(238, 29, 35, 0.07); }
+.ct-error { font-size: 0.85rem; color: #ff8a84; animation: ctIn 0.3s var(--ease); }
+
+.ct-status, .ct-summary {
+  padding: 14px 18px; font-size: 0.95rem; line-height: 1.6;
+  border: 1px solid; animation: ctIn 0.35s var(--ease);
+}
+.ct-status:focus, .ct-summary:focus { outline: 2px solid var(--brand); outline-offset: 2px; }
+.ct-status--ok { color: #b8f0c8; border-color: rgba(120, 220, 150, 0.5); background: rgba(60, 170, 100, 0.12); }
+.ct-status--error, .ct-summary { color: #ffb4af; border-color: var(--brand-soft); background: rgba(238, 29, 35, 0.1); }
+@keyframes ctIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* spam trap: out of sight and out of the tab order */
+.ct-hp { position: absolute; inset-inline-start: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.ct-submit { justify-self: start; min-width: 220px; justify-content: center; }
+.ct-submit__spinner {
+  display: none; width: 18px; height: 18px; flex: none;
+  border: 2px solid rgba(255, 255, 255, 0.35); border-top-color: #ffffff; border-radius: 50%;
+  animation: ctSpin 0.8s linear infinite;
+}
+.ct-submit.is-busy .ct-submit__spinner { display: inline-block; }
+.ct-submit.is-busy .ct-submit__arrow { display: none; }
+.ct-submit:disabled { cursor: progress; opacity: 0.85; }
+@keyframes ctSpin { to { transform: rotate(360deg); } }
+@media (max-width: 639px) { .ct-submit { justify-self: stretch; } }
+
+/* =========================================================================
+   04 — LOCATION
+   ========================================================================= */
+.ct-location__grid { display: grid; gap: clamp(32px, 5vw, 72px); align-items: center; }
+@media (min-width: 900px) { .ct-location__grid { grid-template-columns: 0.8fr 1.2fr; } }
+.ct-location__text { display: grid; gap: 14px; justify-items: start; }
+.ct-location__label { margin-top: 8px; font-size: 0.78rem; color: var(--brand); letter-spacing: 0.16em; text-transform: uppercase; font-family: var(--font-en); }
+.ct-location__label:lang(ar), [lang="ar"] .ct-location__label { font-family: var(--font-ar); letter-spacing: 0; text-transform: none; font-size: 0.9rem; }
+.ct-location__address { font-size: 1.15rem; color: var(--cream); line-height: 1.6; margin-bottom: 8px; }
+
+.ct-map {
+  position: relative; aspect-ratio: 4 / 3; overflow: hidden;
+  border: 1px solid var(--brand-line); background: var(--bg-3); box-shadow: var(--shadow-deep);
+}
+@media (min-width: 900px) { .ct-map { aspect-ratio: 16 / 11; } }
+.ct-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.25) contrast(1.05); }
+.ct-map__ph { position: absolute; inset: 0; display: grid; place-items: center; color: var(--cream); }
+.ct-map__svg { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--cream); }
+.ct-map__ph-text { position: relative; padding: 24px; text-align: center; display: grid; gap: 8px; max-width: 46ch; }
+.ct-map__city { font-size: 1.1rem; font-weight: 700; margin-top: 70px; }
+.ct-map__soon { color: var(--muted); font-size: 0.92rem; }
+.ct-map__setup {
+  margin-top: 6px; padding: 10px 12px; font-size: 0.78rem; line-height: 1.5; text-align: start;
+  color: #ffd9b8; border: 1px dashed var(--brand-soft); background: rgba(0, 0, 0, 0.55); direction: ltr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-card, .ct-card__icon, .ct-card__cta .icon { transition: none; }
+  a.ct-card:hover, a.ct-card:focus-visible { transform: none; }
+  .ct-status, .ct-summary, .ct-error { animation: none; }
+  .ct-submit__spinner { animation-duration: 2s; }
+}

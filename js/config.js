@@ -32,6 +32,9 @@ window.restaurantConfig = {
   // Full Google Maps link to the restaurant (share link from Google Maps)
   // Currently a search for the city; replace with the restaurant's exact Google Maps pin link.
   googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Dammam%2C%20Saudi%20Arabia",
+  // Contact page map: the https://www.google.com/maps/embed?... address of the restaurant pin
+  // (Google Maps → Share → Embed a map → copy the iframe src). Empty = a map placeholder is shown.
+  mapsEmbedUrl: "",
 
   // Opening hours. Example entry:
   // { days: { ar: "السبت – الخميس", en: "Saturday – Thursday" }, time: { ar: "١٢:٠٠ م – ١٢:٠٠ ص", en: "12:00 PM – 12:00 AM" } }

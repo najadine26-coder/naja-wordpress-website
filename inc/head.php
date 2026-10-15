@@ -51,6 +51,14 @@ function naja_seo_copy() {
 			'meta'  => array( 'title' => 'xp.metaTitle', 'desc' => 'xp.metaDesc' ),
 		);
 	}
+	if ( naja_is_contact_page() ) {
+		return array(
+			'title' => 'تواصل مع مطعم نجا في الدمام | اتصال وواتساب وموقع المطعم',
+			'desc'  => 'تواصل مع مطعم نجا في الدمام: اتصل بنا أو راسلنا عبر واتساب أو أرسل رسالة من النموذج، وتعرّف على الموقع وطرق الوصول.',
+			'image' => naja_custom_image( 'grill' ) ? naja_custom_image( 'grill' ) : 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&h=630&q=80',
+			'meta'  => array( 'title' => 'ct.metaTitle', 'desc' => 'ct.metaDesc' ),
+		);
+	}
 	return null;
 }
 
@@ -145,6 +153,7 @@ function naja_default_hero_photos() {
 		'presentation' => array( 'photo-1544025162-d76694265947', 'طبق لحم مقدم على لوح تقديم', 1100 ),
 		'interior'     => array( 'photo-1517248135467-4c7edcad34c4', 'صالة مطعم بإضاءة دافئة وطاولات مُعدّة', 1600 ),
 		'plated'       => array( 'photo-1515003197210-e0cd7184f8b5', 'طبق مقدم بعناية على طاولة داكنة', 1100 ),
+		'grill'        => array( 'photo-1555939594-58d7cb561ad1', 'أسياخ لحم مشوية على الفحم', 1100 ),
 	);
 }
 
@@ -197,7 +206,7 @@ function naja_faq() {
 /** Attributes on <body> that main.js reads (page type and which meta keys to translate). */
 function naja_body_attrs() {
 	$copy = naja_seo_copy();
-	$page = is_front_page() ? 'home' : ( naja_is_menu_page() ? 'menu' : ( naja_is_gallery_page() ? 'gallery' : ( naja_is_experience_page() ? 'experience' : 'page' ) ) );
+	$page = is_front_page() ? 'home' : ( naja_is_menu_page() ? 'menu' : ( naja_is_gallery_page() ? 'gallery' : ( naja_is_experience_page() ? 'experience' : ( naja_is_contact_page() ? 'contact' : 'page' ) ) ) );
 	echo 'data-page="' . esc_attr( $page ) . '"';
 	if ( $copy && ! naja_seo_plugin_active() ) {
 		echo ' data-meta-title="' . esc_attr( $copy['meta']['title'] ) . '" data-meta-desc="' . esc_attr( $copy['meta']['desc'] ) . '"';

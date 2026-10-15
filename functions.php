@@ -19,6 +19,7 @@ require get_template_directory() . '/inc/helpers.php';
 require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/dishes.php';
 require get_template_directory() . '/inc/head.php';
+require get_template_directory() . '/inc/contact.php';
 require get_template_directory() . '/inc/github-sync.php';
 
 /**
@@ -51,6 +52,9 @@ function naja_enqueue_assets() {
 	if ( naja_is_experience_page() ) {
 		wp_enqueue_style( 'naja-experience', $uri . '/css/experience.css', array( 'naja-style' ), $ver );
 	}
+	if ( naja_is_contact_page() ) {
+		wp_enqueue_style( 'naja-contact', $uri . '/css/contact.css', array( 'naja-style' ), $ver );
+	}
 	wp_enqueue_style( 'naja-wp', $uri . '/css/wp.css', array( 'naja-style' ), $ver );
 
 	wp_enqueue_script( 'naja-config', $uri . '/js/config.js', array(), $ver, true );
@@ -72,6 +76,10 @@ function naja_enqueue_assets() {
 	wp_enqueue_script( 'gsap', $uri . '/js/vendor/gsap.min.js', array(), '3.12.5', true );
 	wp_enqueue_script( 'gsap-scrolltrigger', $uri . '/js/vendor/ScrollTrigger.min.js', array( 'gsap' ), '3.12.5', true );
 	wp_enqueue_script( 'naja-main', $uri . '/js/main.js', $main_deps, $ver, true );
+	if ( naja_is_contact_page() ) {
+		wp_enqueue_script( 'naja-contact', $uri . '/js/contact.js', array( 'naja-main' ), $ver, true );
+		wp_add_inline_script( 'naja-contact', 'window.najaContact=' . wp_json_encode( array( 'ajaxUrl' => admin_url( 'admin-ajax.php' ) ) ) . ';', 'before' );
+	}
 	wp_enqueue_script( 'naja-animations', $uri . '/js/animations.js', array( 'gsap', 'gsap-scrolltrigger', 'naja-main' ), $ver, true );
 }
 add_action( 'wp_enqueue_scripts', 'naja_enqueue_assets' );
@@ -174,3 +182,33 @@ function naja_maybe_create_experience_page() {
 	}
 }
 add_action( 'init', 'naja_maybe_create_experience_page', 20 );
+
+/**
+ * Create the Contact page (once), like the Gallery and Experience pages.
+ */
+function naja_create_contact_page() {
+	if ( naja_contact_page_id() ) {
+		update_option( 'naja_contact_page_ready', '1' );
+		return;
+	}
+	$id = wp_insert_post(
+		array(
+			'post_title'  => 'تواصل معنا',
+			'post_name'   => 'contact',
+			'post_status' => 'publish',
+			'post_type'   => 'page',
+		)
+	);
+	if ( $id && ! is_wp_error( $id ) ) {
+		update_post_meta( $id, '_wp_page_template', 'page-templates/contact.php' );
+		update_option( 'naja_contact_page_ready', '1' );
+	}
+}
+add_action( 'after_switch_theme', 'naja_create_contact_page' );
+
+function naja_maybe_create_contact_page() {
+	if ( '1' !== get_option( 'naja_contact_page_ready' ) ) {
+		naja_create_contact_page();
+	}
+}
+add_action( 'init', 'naja_maybe_create_contact_page', 20 );
