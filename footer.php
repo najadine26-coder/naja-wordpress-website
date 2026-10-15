@@ -46,6 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
           <li><a <?php echo naja_experience_link(); ?> data-i18n="nav.experience">التجربة</a></li>
           <li><a <?php echo naja_gallery_link(); ?> data-i18n="nav.gallery">المعرض</a></li>
           <li><a <?php echo naja_section_link( '#how-to-order' ); ?> data-i18n="nav.order">طريقة الطلب</a></li>
+          <li><a <?php echo naja_blog_link(); ?> data-i18n="nav.blog">المدونة</a></li>
           <li><a <?php echo naja_contact_link(); ?> data-i18n="nav.contact">تواصل معنا</a></li>
         </ul>
       </nav>

@@ -51,6 +51,25 @@ function naja_seo_copy() {
 			'meta'  => array( 'title' => 'xp.metaTitle', 'desc' => 'xp.metaDesc' ),
 		);
 	}
+	if ( naja_is_blog_archive() ) {
+		return array(
+			'title' => 'مدونة مطعم نجا | أدلة الأكل والمطاعم في الدمام',
+			'desc'  => 'مدونة مطعم نجا: أدلة ونصائح عملية عن المطاعم والأكل في الدمام، من الأكل السعودي والمشويات إلى العشاء العائلي وتخطيط الزيارة. المقالات متوفرة بالإنجليزية.',
+			'image' => 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&h=630&q=80',
+			'meta'  => array( 'title' => 'bl.metaTitle', 'desc' => 'bl.metaDesc' ),
+		);
+	}
+	if ( naja_is_article() ) {
+		$image = naja_article_image( get_queried_object_id(), 1200 );
+		return array(
+			'title'  => naja_article_seo_title( get_queried_object_id() ),
+			'desc'   => naja_article_description( get_queried_object_id() ),
+			'image'  => $image['src'],
+			'type'   => 'article',
+			'locale' => 'en_US', // the article text is English; the page script must not relabel it
+			'meta'   => null,
+		);
+	}
 	if ( naja_is_contact_page() ) {
 		return array(
 			'title' => 'تواصل مع مطعم نجا في الدمام | اتصال وواتساب وموقع المطعم',
@@ -76,12 +95,24 @@ function naja_head() {
 
 	if ( $copy && ! naja_seo_plugin_active() ) {
 		printf( '<meta name="description" content="%s">' . "\n", esc_attr( $copy['desc'] ) );
-		printf( '<meta property="og:type" content="website">' . "\n" );
+		printf( '<meta property="og:type" content="%s">' . "\n", esc_attr( isset( $copy['type'] ) ? $copy['type'] : 'website' ) );
 		printf( '<meta property="og:site_name" content="%s">' . "\n", esc_attr( 'Naja Restaurant | مطعم نجا' ) );
 		printf( '<meta property="og:title" content="%s">' . "\n", esc_attr( $copy['title'] ) );
 		printf( '<meta property="og:description" content="%s">' . "\n", esc_attr( $copy['desc'] ) );
 		printf( '<meta property="og:url" content="%s">' . "\n", esc_url( is_front_page() ? home_url( '/' ) : get_permalink() ) );
-		echo '<meta property="og:locale" content="ar_SA">' . "\n" . '<meta property="og:locale:alternate" content="en_US">' . "\n";
+		if ( empty( $copy['locale'] ) ) {
+			echo '<meta property="og:locale" content="ar_SA">' . "\n" . '<meta property="og:locale:alternate" content="en_US">' . "\n";
+		} else {
+			printf( '<meta property="og:locale" content="%s">' . "\n", esc_attr( $copy['locale'] ) ); // fixed: main.js leaves article pages alone
+		}
+		if ( naja_is_article() ) {
+			printf( '<meta property="article:published_time" content="%s">' . "\n", esc_attr( get_the_date( 'c', get_queried_object_id() ) ) );
+			printf( '<meta property="article:modified_time" content="%s">' . "\n", esc_attr( get_the_modified_date( 'c', get_queried_object_id() ) ) );
+			$cat = naja_article_category( get_queried_object_id() );
+			if ( $cat['name'] ) {
+				printf( '<meta property="article:section" content="%s">' . "\n", esc_attr( $cat['name'] ) );
+			}
+		}
 		printf( '<meta property="og:image" content="%s">' . "\n", esc_url( $copy['image'] ) );
 		echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
 		printf( '<meta name="twitter:title" content="%s">' . "\n", esc_attr( $copy['title'] ) );
@@ -206,9 +237,9 @@ function naja_faq() {
 /** Attributes on <body> that main.js reads (page type and which meta keys to translate). */
 function naja_body_attrs() {
 	$copy = naja_seo_copy();
-	$page = is_front_page() ? 'home' : ( naja_is_menu_page() ? 'menu' : ( naja_is_gallery_page() ? 'gallery' : ( naja_is_experience_page() ? 'experience' : ( naja_is_contact_page() ? 'contact' : 'page' ) ) ) );
+	$page = is_front_page() ? 'home' : ( naja_is_menu_page() ? 'menu' : ( naja_is_gallery_page() ? 'gallery' : ( naja_is_experience_page() ? 'experience' : ( naja_is_contact_page() ? 'contact' : ( naja_is_blog_archive() ? 'blog' : ( naja_is_article() ? 'article' : 'page' ) ) ) ) ) );
 	echo 'data-page="' . esc_attr( $page ) . '"';
-	if ( $copy && ! naja_seo_plugin_active() ) {
+	if ( $copy && ! empty( $copy['meta'] ) && ! naja_seo_plugin_active() ) {
 		echo ' data-meta-title="' . esc_attr( $copy['meta']['title'] ) . '" data-meta-desc="' . esc_attr( $copy['meta']['desc'] ) . '"';
 	}
 	// Without data-meta-* keys, main.js leaves the WordPress / SEO-plugin title alone.

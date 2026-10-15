@@ -1,0 +1,193 @@
+/* =========================================================================
+   NAJA RESTAURANT — BLOG (listing /blog/ and article pages)
+   Loaded after style.css on blog pages only. Reuses the homepage tokens,
+   hero, buttons, filter chips, search field, empty state, "visit" call to
+   action and footer styles. Logical properties keep RTL/LTR correct.
+   ========================================================================= */
+
+/* =========================================================================
+   Listing — hero
+   ========================================================================= */
+.hero--blog {
+  min-height: 58vh;
+  min-height: 58svh;
+  justify-content: center;
+  padding-bottom: clamp(56px, 8vh, 96px);
+}
+.hero--blog .hero__content { max-width: 820px; }
+.hero--blog .hero__title { font-size: clamp(2.8rem, 8vw, 6.2rem); }
+.hero--blog .hero__img { object-position: center 50%; }
+.hero--blog .hero__shade {
+  background:
+    linear-gradient(to top, var(--bg) 0%, rgba(17, 17, 17, 0.8) 26%, rgba(17, 17, 17, 0.35) 62%, rgba(17, 17, 17, 0.6) 100%),
+    linear-gradient(to left, rgba(17, 17, 17, 0.9) 0%, rgba(17, 17, 17, 0.4) 60%, rgba(17, 17, 17, 0.15) 100%);
+}
+[dir="ltr"] .hero--blog .hero__shade {
+  background:
+    linear-gradient(to top, var(--bg) 0%, rgba(17, 17, 17, 0.8) 26%, rgba(17, 17, 17, 0.35) 62%, rgba(17, 17, 17, 0.6) 100%),
+    linear-gradient(to right, rgba(17, 17, 17, 0.9) 0%, rgba(17, 17, 17, 0.4) 60%, rgba(17, 17, 17, 0.15) 100%);
+}
+
+/* =========================================================================
+   Cards (listing grid + related articles)
+   ========================================================================= */
+.bl-grid {
+  display: grid; gap: clamp(16px, 2vw, 28px);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 640px) { .bl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .bl-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.bl-grid > li[hidden] { display: none; }
+
+.bl-card {
+  position: relative; display: flex; flex-direction: column; min-width: 0;
+  border: 1px solid var(--brand-line);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.035), transparent 60%), var(--bg-2);
+  transition: border-color 0.4s var(--ease), transform 0.5s var(--ease);
+}
+.bl-card:hover, .bl-card:focus-within { border-color: var(--brand-soft); transform: translateY(-4px); }
+.bl-card__media { display: block; aspect-ratio: 3 / 2; position: relative; overflow: hidden; }
+.bl-card__media img, .bl-feature__media img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transition: transform 1s var(--ease), opacity 0.6s;
+}
+.bl-card:hover .bl-card__media img { transform: scale(1.05); }
+.bl-card__body { display: flex; flex-direction: column; gap: 10px; padding: 20px 20px 22px; flex: 1; }
+.bl-card__cat {
+  font-size: 0.74rem; color: var(--brand); letter-spacing: 0.16em; text-transform: uppercase; font-family: var(--font-en);
+}
+.bl-card__cat:lang(ar), [lang="ar"] .bl-card__cat { font-family: var(--font-ar); letter-spacing: 0; text-transform: none; font-size: 0.86rem; }
+.bl-card__title { font-size: 1.2rem; line-height: 1.35; font-weight: 700; font-family: var(--font-en); }
+.bl-card__title a:hover, .bl-card__title a:focus-visible { color: var(--brand); }
+/* the whole card is clickable through the title link */
+.bl-card__title a::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.bl-card__excerpt { color: var(--muted); font-size: 0.93rem; line-height: 1.65; font-family: var(--font-en); }
+.bl-card__meta {
+  margin-top: auto; padding-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px;
+  font-size: 0.82rem; color: var(--muted); font-family: var(--font-en);
+}
+.bl-card__meta time { font-family: var(--font-en); }
+.bl-card__more {
+  margin-inline-start: auto; display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 600; color: var(--brand); font-family: var(--font-ar);
+}
+:lang(en) .bl-card__more, [lang="en"] .bl-card__more { font-family: var(--font-en); }
+.bl-card__more .icon { transition: transform 0.4s var(--ease); }
+.bl-card:hover .bl-card__more .icon { transform: translateX(4px); }
+[dir="rtl"] .bl-card:hover .bl-card__more .icon { transform: scaleX(-1) translateX(4px); }
+.bl-card__dot { opacity: 0.6; }
+
+/* =========================================================================
+   Featured article
+   ========================================================================= */
+.bl-feature {
+  display: grid; gap: clamp(20px, 4vw, 56px); align-items: center; margin-top: 28px;
+}
+.bl-feature__media { display: block; aspect-ratio: 3 / 2; position: relative; overflow: hidden; box-shadow: var(--shadow-deep); }
+.bl-feature:hover .bl-feature__media img { transform: scale(1.04); }
+.bl-feature__body { display: grid; gap: 14px; justify-items: start; }
+.bl-feature__title { font-size: clamp(1.7rem, 3.4vw, 2.7rem); line-height: 1.2; font-weight: 700; font-family: var(--font-en); }
+.bl-feature__title a:hover, .bl-feature__title a:focus-visible { color: var(--brand); }
+.bl-feature__excerpt { color: rgba(255, 248, 242, 0.82); font-size: 1.05rem; line-height: 1.7; max-width: 56ch; font-family: var(--font-en); }
+@media (min-width: 1000px) { .bl-feature { grid-template-columns: 1.15fr 0.85fr; } }
+
+/* =========================================================================
+   Search, filters, status
+   ========================================================================= */
+.bl-tools { display: grid; gap: 18px; margin-bottom: 14px; }
+.bl-search { max-width: 560px; }
+.bl-cats { display: flex; flex-wrap: wrap; gap: 8px; }
+.bl-cats .cat-btn { display: inline-flex; align-items: center; gap: 8px; }
+.bl-cats__count {
+  font-family: var(--font-en); font-size: 0.72rem; line-height: 1;
+  padding: 4px 6px; border: 1px solid var(--brand-line); color: var(--muted);
+}
+.cat-btn[aria-pressed="true"] .bl-cats__count { border-color: rgba(255, 255, 255, 0.45); color: #ffffff; }
+.bl-status { min-height: 1.7em; margin-block: 8px 24px; font-size: 0.88rem; color: var(--muted); }
+.bl-more { margin-top: 36px; text-align: center; }
+
+/* =========================================================================
+   Article page
+   ========================================================================= */
+.bl-page { padding-top: calc(var(--header-h) + 36px); }
+.bl-article { max-width: calc(860px + var(--gutter) * 2); }
+
+.bl-crumbs { margin-bottom: 28px; font-size: 0.85rem; color: var(--muted); }
+.bl-crumbs ol { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.bl-crumbs li { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.bl-crumbs li + li::before { content: "/"; opacity: 0.5; }
+.bl-crumbs a:hover, .bl-crumbs a:focus-visible { color: var(--brand); }
+.bl-crumbs [aria-current] span { color: var(--cream); overflow-wrap: anywhere; }
+
+.bl-entry__head { display: grid; gap: 16px; justify-items: start; }
+.bl-entry__title {
+  font-size: clamp(2rem, 4.6vw, 3.4rem); line-height: 1.15; font-weight: 700; letter-spacing: -0.02em;
+  font-family: var(--font-en); text-wrap: balance;
+}
+.bl-entry__lead { font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: rgba(255, 248, 242, 0.82); line-height: 1.7; font-family: var(--font-en); max-width: 62ch; }
+.bl-entry__meta {
+  display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center;
+  font-size: 0.86rem; color: var(--muted);
+}
+.bl-langnote { font-size: 0.82rem; color: var(--muted); border-inline-start: 2px solid var(--brand); padding-inline-start: 10px; }
+
+.bl-entry__figure { margin: 32px 0 0; }
+.bl-entry__frame { display: block; position: relative; aspect-ratio: 3 / 2; overflow: hidden; box-shadow: var(--shadow-deep); }
+.bl-entry__frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.bl-entry__figure figcaption { margin-top: 10px; font-size: 0.8rem; color: var(--muted); }
+
+/* long-form text */
+.bl-prose {
+  max-width: 720px; margin: 44px auto 0;
+  font-family: var(--font-en); font-size: 1.1rem; line-height: 1.85; color: rgba(255, 248, 242, 0.88);
+  text-align: start;
+}
+.bl-prose > * + * { margin-top: 1.15em; }
+.bl-prose h2 { margin-top: 2.2em; font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.25; font-weight: 700; color: var(--cream); letter-spacing: -0.01em; }
+.bl-prose h3 { margin-top: 1.8em; font-size: 1.25rem; line-height: 1.3; font-weight: 600; color: var(--cream); }
+.bl-prose ul, .bl-prose ol { padding-inline-start: 1.4em; }
+.bl-prose ul { list-style: disc; }
+.bl-prose ol { list-style: decimal; }
+.bl-prose li + li { margin-top: 0.5em; }
+.bl-prose li::marker { color: var(--brand); }
+.bl-prose a { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.bl-prose a:hover, .bl-prose a:focus-visible { color: #ffffff; }
+.bl-prose blockquote { margin-inline: 0; padding: 4px 0 4px 20px; border-inline-start: 2px solid var(--brand); color: var(--cream); font-style: italic; }
+.bl-prose strong { color: var(--cream); font-weight: 600; }
+
+.bl-faq { max-width: 720px; margin: 56px auto 0; padding-top: 36px; border-top: 1px solid var(--brand-line); font-family: var(--font-en); text-align: start; }
+.bl-faq h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); font-weight: 700; color: var(--cream); }
+.bl-faq h3 { margin-top: 1.6em; font-size: 1.1rem; font-weight: 600; color: var(--cream); line-height: 1.4; }
+.bl-faq p { margin-top: 0.5em; color: rgba(255, 248, 242, 0.85); line-height: 1.75; }
+
+.bl-note {
+  max-width: 720px; margin: 56px auto 0; padding: clamp(22px, 3vw, 34px);
+  border: 1px solid var(--brand-line);
+  background: linear-gradient(160deg, rgba(238, 29, 35, 0.08), transparent 70%), var(--bg-2);
+  display: grid; gap: 14px;
+}
+.bl-note__title { font-size: 1.25rem; font-weight: 700; }
+.bl-note p { color: rgba(255, 248, 242, 0.85); }
+.bl-note__ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+@media (max-width: 479px) { .bl-note__ctas .btn { width: 100%; } }
+
+.bl-related { margin-top: clamp(48px, 7vw, 96px); }
+.bl-related .section-title { font-size: clamp(1.7rem, 3vw, 2.4rem); margin-bottom: 28px; }
+.bl-back { margin-top: 36px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bl-card, .bl-card__media img, .bl-feature__media img, .bl-card__more .icon { transition: none; }
+  .bl-card:hover, .bl-card:focus-within { transform: none; }
+  .bl-card:hover .bl-card__media img, .bl-feature:hover .bl-feature__media img { transform: none; }
+}
+
+/* =========================================================================
+   Mixed-language rows: the titles and article text are English, the labels
+   around them follow the site language. In Arabic those labels would sit on
+   the right while the English sits on the left, so the English-led blocks are
+   laid out left-to-right as a whole. The "about Naja" box stays Arabic/RTL.
+   ========================================================================= */
+.bl-crumbs, .bl-entry__head, .bl-entry__figure figcaption,
+.bl-card__body, .bl-feature__body { direction: ltr; text-align: left; }
+.bl-card__more { margin-inline-start: 0; margin-inline-end: 0; margin-left: auto; }
+[dir="rtl"] .bl-card:hover .bl-card__more .icon { transform: scaleX(-1) translateX(4px); }

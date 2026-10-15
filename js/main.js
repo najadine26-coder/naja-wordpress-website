@@ -228,7 +228,7 @@
     root.lang = lang;
     root.dir = lang === "ar" ? "rtl" : "ltr";
 
-    $$("[data-i18n]").forEach(function (el) { el.textContent = t(el.dataset.i18n); });
+    $$("[data-i18n]").forEach(function (el) { el.textContent = t(el.dataset.i18n, el.dataset.n ? { n: el.dataset.n } : null); });
     $$("[data-i18n-attr]").forEach(function (el) {
       el.dataset.i18nAttr.split(";").forEach(function (pair) {
         var parts = pair.split(":");
@@ -260,8 +260,9 @@
       if (ogDesc) ogDesc.setAttribute("content", t(descKey));
       if (twDesc) twDesc.setAttribute("content", t(descKey));
     }
+    // Blog articles are English text on every language setting, so their locale stays fixed
     var ogLocale = $('meta[property="og:locale"]');
-    if (ogLocale) ogLocale.setAttribute("content", lang === "ar" ? "ar_SA" : "en_US");
+    if (ogLocale && page !== "article") ogLocale.setAttribute("content", lang === "ar" ? "ar_SA" : "en_US");
     var ogAlt = $('meta[property="og:locale:alternate"]');
     if (ogAlt) ogAlt.setAttribute("content", lang === "ar" ? "en_US" : "ar_SA");
 

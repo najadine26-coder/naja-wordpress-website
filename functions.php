@@ -20,6 +20,7 @@ require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/dishes.php';
 require get_template_directory() . '/inc/head.php';
 require get_template_directory() . '/inc/contact.php';
+require get_template_directory() . '/inc/blog.php';
 require get_template_directory() . '/inc/github-sync.php';
 
 /**
@@ -55,6 +56,9 @@ function naja_enqueue_assets() {
 	if ( naja_is_contact_page() ) {
 		wp_enqueue_style( 'naja-contact', $uri . '/css/contact.css', array( 'naja-style' ), $ver );
 	}
+	if ( naja_is_blog_archive() || naja_is_article() ) {
+		wp_enqueue_style( 'naja-blog', $uri . '/css/blog.css', array( 'naja-style' ), $ver );
+	}
 	wp_enqueue_style( 'naja-wp', $uri . '/css/wp.css', array( 'naja-style' ), $ver );
 
 	wp_enqueue_script( 'naja-config', $uri . '/js/config.js', array(), $ver, true );
@@ -79,6 +83,9 @@ function naja_enqueue_assets() {
 	if ( naja_is_contact_page() ) {
 		wp_enqueue_script( 'naja-contact', $uri . '/js/contact.js', array( 'naja-main' ), $ver, true );
 		wp_add_inline_script( 'naja-contact', 'window.najaContact=' . wp_json_encode( array( 'ajaxUrl' => admin_url( 'admin-ajax.php' ) ) ) . ';', 'before' );
+	}
+	if ( naja_is_blog_archive() ) {
+		wp_enqueue_script( 'naja-blog', $uri . '/js/blog.js', array( 'naja-main' ), $ver, true );
 	}
 	wp_enqueue_script( 'naja-animations', $uri . '/js/animations.js', array( 'gsap', 'gsap-scrolltrigger', 'naja-main' ), $ver, true );
 }
