@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
           <li><a <?php echo naja_section_link( '' ); ?> data-i18n="nav.home">الرئيسية</a></li>
           <li><a <?php echo naja_menu_link(); ?> data-i18n="nav.menu">القائمة</a></li>
           <li><a <?php echo naja_section_link( '#experience' ); ?> data-i18n="nav.experience">التجربة</a></li>
-          <li><a <?php echo naja_section_link( '#gallery' ); ?> data-i18n="nav.gallery">المعرض</a></li>
+          <li><a <?php echo naja_gallery_link(); ?> data-i18n="nav.gallery">المعرض</a></li>
           <li><a <?php echo naja_section_link( '#how-to-order' ); ?> data-i18n="nav.order">طريقة الطلب</a></li>
           <li><a <?php echo naja_section_link( '#visit' ); ?> data-i18n="nav.contact">تواصل معنا</a></li>
         </ul>

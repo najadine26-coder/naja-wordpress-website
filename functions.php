@@ -45,6 +45,9 @@ function naja_enqueue_assets() {
 	if ( naja_is_menu_page() ) {
 		wp_enqueue_style( 'naja-menu', $uri . '/css/menu.css', array( 'naja-style' ), $ver );
 	}
+	if ( naja_is_gallery_page() ) {
+		wp_enqueue_style( 'naja-gallery', $uri . '/css/gallery.css', array( 'naja-style' ), $ver );
+	}
 	wp_enqueue_style( 'naja-wp', $uri . '/css/wp.css', array( 'naja-style' ), $ver );
 
 	wp_enqueue_script( 'naja-config', $uri . '/js/config.js', array(), $ver, true );
@@ -56,10 +59,16 @@ function naja_enqueue_assets() {
 		wp_add_inline_script( 'naja-menu-data', $dishes_js, 'after' );
 	}
 
+	$main_deps = array( 'naja-config', 'naja-menu-data', 'naja-translations' );
+	if ( naja_is_gallery_page() ) {
+		wp_enqueue_script( 'naja-gallery-data', $uri . '/js/gallery-data.js', array( 'naja-config' ), $ver, true );
+		$main_deps[] = 'naja-gallery-data';
+	}
+
 	wp_enqueue_script( 'naja-translations', $uri . '/js/translations.js', array(), $ver, true );
 	wp_enqueue_script( 'gsap', $uri . '/js/vendor/gsap.min.js', array(), '3.12.5', true );
 	wp_enqueue_script( 'gsap-scrolltrigger', $uri . '/js/vendor/ScrollTrigger.min.js', array( 'gsap' ), '3.12.5', true );
-	wp_enqueue_script( 'naja-main', $uri . '/js/main.js', array( 'naja-config', 'naja-menu-data', 'naja-translations' ), $ver, true );
+	wp_enqueue_script( 'naja-main', $uri . '/js/main.js', $main_deps, $ver, true );
 	wp_enqueue_script( 'naja-animations', $uri . '/js/animations.js', array( 'gsap', 'gsap-scrolltrigger', 'naja-main' ), $ver, true );
 }
 add_action( 'wp_enqueue_scripts', 'naja_enqueue_assets' );
@@ -84,3 +93,36 @@ function naja_create_menu_page() {
 	}
 }
 add_action( 'after_switch_theme', 'naja_create_menu_page' );
+
+/**
+ * Create the Gallery page (once) so the "Gallery" link works straight away.
+ * Runs on activation and, for sites that already had the theme active, on the
+ * first request after the update. A page that already uses the Gallery template
+ * is reused; if another page owns /gallery/, WordPress gives the new one a free address.
+ */
+function naja_create_gallery_page() {
+	if ( naja_gallery_page_id() ) {
+		update_option( 'naja_gallery_page_ready', '1' );
+		return;
+	}
+	$id = wp_insert_post(
+		array(
+			'post_title'  => 'المعرض',
+			'post_name'   => 'gallery',
+			'post_status' => 'publish',
+			'post_type'   => 'page',
+		)
+	);
+	if ( $id && ! is_wp_error( $id ) ) {
+		update_post_meta( $id, '_wp_page_template', 'page-templates/gallery.php' );
+		update_option( 'naja_gallery_page_ready', '1' );
+	}
+}
+add_action( 'after_switch_theme', 'naja_create_gallery_page' );
+
+function naja_maybe_create_gallery_page() {
+	if ( '1' !== get_option( 'naja_gallery_page_ready' ) ) {
+		naja_create_gallery_page();
+	}
+}
+add_action( 'init', 'naja_maybe_create_gallery_page', 20 );

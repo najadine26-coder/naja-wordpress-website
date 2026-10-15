@@ -55,6 +55,36 @@ function naja_menu_link() {
 	return 'href="' . esc_url( $url ) . '" data-page-link="' . esc_url( $url ) . '"' . $current;
 }
 
+/** Is the current view the Gallery page template? */
+function naja_is_gallery_page() {
+	return is_page_template( 'page-templates/gallery.php' );
+}
+
+/** ID of the first published page that uses the Gallery template (0 if none). */
+function naja_gallery_page_id() {
+	$pages = get_pages(
+		array(
+			'meta_key'   => '_wp_page_template', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'meta_value' => 'page-templates/gallery.php', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'number'     => 1,
+		)
+	);
+	return $pages ? (int) $pages[0]->ID : 0;
+}
+
+/** URL of the Gallery page. */
+function naja_gallery_url() {
+	$id = naja_gallery_page_id();
+	return $id ? get_permalink( $id ) : home_url( '/gallery/' );
+}
+
+/** Attributes for a link to the Gallery page (carries the language like the Menu link). */
+function naja_gallery_link() {
+	$url     = naja_gallery_url();
+	$current = naja_is_gallery_page() ? ' aria-current="page"' : '';
+	return 'href="' . esc_url( $url ) . '" data-page-link="' . esc_url( $url ) . '"' . $current;
+}
+
 /** Digits of a phone number ("+966 58…" → "96658…"). */
 function naja_digits( $value ) {
 	$d = preg_replace( '/\D+/', '', (string) $value );

@@ -35,6 +35,14 @@ function naja_seo_copy() {
 			'meta'  => array( 'title' => 'mp.metaTitle', 'desc' => 'mp.metaDesc' ),
 		);
 	}
+	if ( naja_is_gallery_page() ) {
+		return array(
+			'title' => 'معرض صور مطعم نجا في الدمام | أطباق وحلويات وأجواء المطعم',
+			'desc'  => 'تصفّح معرض مطعم نجا في الدمام: لقطات من المشويات والأطباق المميزة والحلويات وأجواء المطعم. الصور الحالية توضيحية.',
+			'image' => naja_custom_image( 'interior' ) ? naja_custom_image( 'interior' ) : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&h=630&q=80',
+			'meta'  => array( 'title' => 'gp.metaTitle', 'desc' => 'gp.metaDesc' ),
+		);
+	}
 	return null;
 }
 
@@ -122,12 +130,21 @@ function naja_head() {
 }
 add_action( 'wp_head', 'naja_head', 2 );
 
+/** Default (placeholder) hero photos: key => Unsplash photo id, Arabic alt text, default width. */
+function naja_default_hero_photos() {
+	return array(
+		'hero'         => array( 'photo-1546069901-ba9599a7e63c', 'طبق طعام ملون وطازج مقدم بأناقة', 2200 ),
+		'presentation' => array( 'photo-1544025162-d76694265947', 'طبق لحم مقدم على لوح تقديم', 1100 ),
+		'interior'     => array( 'photo-1517248135467-4c7edcad34c4', 'صالة مطعم بإضاءة دافئة وطاولات مُعدّة', 1600 ),
+	);
+}
+
 /** Responsive srcset of the default (placeholder) hero photos. */
 function naja_default_hero_srcset( $key ) {
-	$base = 'hero' === $key
-		? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=%d&q=85'
-		: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=%d&q=85';
-	$set  = array();
+	$photos = naja_default_hero_photos();
+	$photo  = isset( $photos[ $key ] ) ? $photos[ $key ] : $photos['presentation'];
+	$base   = 'https://images.unsplash.com/' . $photo[0] . '?auto=format&fit=crop&w=%d&q=85';
+	$set    = array();
 	foreach ( array( 800, 1200, 1600, 2200 ) as $w ) {
 		$set[] = sprintf( $base, $w ) . ' ' . $w . 'w';
 	}
@@ -144,17 +161,16 @@ function naja_hero_img( $key ) {
 		printf( '<img class="hero__img" data-img="%s" data-img-sizes="100vw" src="%s" alt="" fetchpriority="high" decoding="async">', esc_attr( $key ), esc_url( $custom ) );
 		return;
 	}
+	$photos = naja_default_hero_photos();
+	$photo  = isset( $photos[ $key ] ) ? $photos[ $key ] : $photos['presentation'];
 	$srcset = naja_default_hero_srcset( $key );
-	$src    = 'hero' === $key
-		? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=2200&q=85'
-		: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1100&q=85';
-	$alt    = 'hero' === $key ? 'طبق طعام ملون وطازج مقدم بأناقة' : 'طبق لحم مقدم على لوح تقديم';
+	$src    = 'https://images.unsplash.com/' . $photo[0] . '?auto=format&fit=crop&w=' . $photo[2] . '&q=85';
 	printf(
 		'<img class="hero__img" data-img="%1$s" data-img-sizes="100vw" src="%2$s" srcset="%3$s" sizes="100vw" alt="%4$s" fetchpriority="high" decoding="async" width="2200" height="1467">',
 		esc_attr( $key ),
 		esc_url( $src ),
 		esc_attr( $srcset ),
-		esc_attr( $alt )
+		esc_attr( $photo[1] )
 	);
 }
 
@@ -172,7 +188,7 @@ function naja_faq() {
 /** Attributes on <body> that main.js reads (page type and which meta keys to translate). */
 function naja_body_attrs() {
 	$copy = naja_seo_copy();
-	$page = is_front_page() ? 'home' : ( naja_is_menu_page() ? 'menu' : 'page' );
+	$page = is_front_page() ? 'home' : ( naja_is_menu_page() ? 'menu' : ( naja_is_gallery_page() ? 'gallery' : 'page' ) );
 	echo 'data-page="' . esc_attr( $page ) . '"';
 	if ( $copy && ! naja_seo_plugin_active() ) {
 		echo ' data-meta-title="' . esc_attr( $copy['meta']['title'] ) . '" data-meta-desc="' . esc_attr( $copy['meta']['desc'] ) . '"';
