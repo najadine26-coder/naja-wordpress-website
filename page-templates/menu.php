@@ -49,6 +49,10 @@ get_header();
           </div>
         </div>
       </div>
+      <a class="hero__scroll" href="#menu-search">
+        <span data-i18n="hero.scroll">مرّر للأسفل</span>
+        <span class="hero__scroll-line" aria-hidden="true"></span>
+      </a>
     </section>
 
     <div class="menu-browse">
