@@ -19,13 +19,23 @@ Naja Dine Agency-র কাস্টম WordPress থিম (`naja-theme`)। �
 3. Repository লিস্টে **Deploy** চাপুন। ফাইলগুলো থিম ফোল্ডারে চলে আসবে।
 4. WordPress admin → **Appearance → Themes** থেকে **Naja Theme** activate করুন।
 
-## Auto deploy (প্রতি push-এ নিজে থেকে আপডেট)
+## Auto deploy (webhook ছাড়া, GitHub Actions + FTP)
 
-1. hPanel → GIT → repository-র পাশে **Auto Deployment** চাপুন, সেখানে একটা **Webhook URL** দেখাবে। সেটা কপি করুন।
-2. GitHub → এই repository → **Settings → Webhooks → Add webhook**।
-3. **Payload URL** এ ওই webhook URL পেস্ট করুন, বাকি সব default রেখে **Add webhook** চাপুন।
+`main` branch-এ push করলেই `.github/workflows/deploy.yml` থিমটা FTP দিয়ে Hostinger-এ আপলোড করে দেয়। এই পদ্ধতিতে hPanel-এর GIT অংশ বা webhook কোনোটাই লাগে না।
 
-এরপর `main` branch-এ push করলেই সাইটে থিম আপডেট হয়ে যাবে।
+একবার শুধু GitHub-এ FTP-র তথ্য দিতে হবে:
+
+1. hPanel → **Files → FTP Accounts** থেকে FTP তথ্য দেখুন (দরকার হলে পাসওয়ার্ড বদলে নিন)।
+2. GitHub → এই repository → **Settings → Secrets and variables → Actions → New repository secret**। নিচের secret গুলো যোগ করুন:
+
+| Secret নাম | মান |
+|---|---|
+| `FTP_SERVER` | FTP IP বা hostname (যেমন `ftp.yourdomain.com`) |
+| `FTP_USERNAME` | FTP username |
+| `FTP_PASSWORD` | FTP password |
+| `FTP_SERVER_DIR` | (ঐচ্ছিক) থিম ফোল্ডারের পথ, শেষে `/` সহ। না দিলে `public_html/wp-content/themes/naja-theme/` ধরা হবে। |
+
+3. GitHub → **Actions → Deploy to Hostinger → Run workflow** চাপুন (অথবা যেকোনো push করুন)। সবুজ টিক আসলে deploy সফল।
 
 ## ফাইল কাঠামো
 
